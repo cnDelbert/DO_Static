@@ -5,13 +5,24 @@
     <title>2 Factor Authentication generator</title>
 </head>
 <body>
-    <div id="webCode"></div>
+<div id="webCode"></div>
 </body>
 </html>
 <script>
     let t = null;
     let k = '';
-    let lastCode = '';
+
+    function getQueryVariable(value) {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            let pair = vars[i].split("=");
+            if (pair[0] == value) {
+                return pair[1];
+            }
+        }
+        return (false);
+    }
 
     function key2code(K, t) {
         function sha1(C) {
@@ -67,29 +78,16 @@
     }
 
     function update() {
-        var e = Math.floor(new Date().getTime() / 1000);
-        var t = Math.floor(e / 30);
+        let e = Math.floor(new Date().getTime() / 1000);
+        let t = Math.floor(e / 30);
         let left = 30 - (e - (t * 30));
         let c = key2code(k, t);
         if (lastCode != c) document.querySelector('#webCode').innerHTML = c;
-        lastCode = c;
-        // document.querySelector('#webRefresh').innerHTML = left;
     }
 
     // parse url param
-    const p = window.location.href.split('?code=');
-    k = p.length > 1 ? p[1] : '';
-    document.querySelector('#webSec').value = k;
+    const p = getQueryVariable("code");
+    k = p !== false ? p : '';
 
-    // setInterval(update, 1000);
     update();
-
-    // const onSecretUpdate = (e) => {
-    //     k = e.target.value;
-    //     update();
-    // };
-    //
-    // document.querySelector('#webSec').addEventListener('keyup', onSecretUpdate);
-    // document.querySelector('#webSec').addEventListener('input', onSecretUpdate);
-    // document.querySelector('#webSec').addEventListener('focus', e => e.target.setSelectionRange(0, e.target.value.length));
 </script>
