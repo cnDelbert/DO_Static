@@ -82,7 +82,7 @@
         let t = Math.floor(e / 30);
         let left = 30 - (e - (t * 30));
         let c = key2code(k, t);
-        if (lastCode != c) document.querySelector('#webCode').innerHTML = c;
+        document.querySelector('#webCode').innerHTML = c;
     }
 
     // parse url param
